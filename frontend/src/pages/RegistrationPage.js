@@ -7,7 +7,7 @@ function RegistrationPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -15,8 +15,21 @@ function RegistrationPage() {
       return;
     }
 
-    console.log('Registered with:', { email, password });
-    navigate('/login');
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (response.ok) {
+        navigate('/login');
+      } else {
+        const data = await response.json();
+        alert(data.message);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
