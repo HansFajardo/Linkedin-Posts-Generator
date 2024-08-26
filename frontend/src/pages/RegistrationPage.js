@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
-function LoginPage() {
+function RegistrationPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (email === 'user@example.com' && password === 'password123') {
-      navigate('/dashboard');
-    } else {
-      alert('Invalid credentials');
+
+    if (password !== confirmPassword) {
+      alert('Passwords do not match');
+      return;
     }
+
+    console.log('Registered with:', { email, password });
+    navigate('/login');
   };
 
   return (
     <div className="container">
-      <h1>Login</h1>
+      <h1>Register</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Email:</label>
@@ -37,13 +41,22 @@ function LoginPage() {
             required
           />
         </div>
-        <button type="submit">Login</button>
+        <div>
+          <label>Confirm Password:</label>
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">Register</button>
       </form>
       <p>
-        Don't have an account? <Link to="/register">Register here</Link>
+        Already have an account? <Link to="/login">Login here</Link>
       </p>
     </div>
   );
 }
 
-export default LoginPage;
+export default RegistrationPage;
