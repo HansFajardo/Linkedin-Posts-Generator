@@ -9,13 +9,18 @@ function DashboardPage() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        const isAdmin = localStorage.getItem('isAdmin');
+
         if (!token) {
             navigate('/login');
+        } else if (isAdmin && isAdmin !== 'undefined' && JSON.parse(isAdmin)) {
+            navigate('/admin'); // Redirect to admin page if user is an admin
         }
     }, [navigate]);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('isAdmin');
         navigate('/login');
     };
 

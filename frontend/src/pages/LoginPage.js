@@ -24,7 +24,8 @@ function LoginPage() {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('token', data.token);
-        navigate('/dashboard');
+        localStorage.setItem('isAdmin', data.isAdmin);
+        navigate(data.isAdmin ? '/admin' : '/dashboard');
       } else {
         alert(data.message);
       }
