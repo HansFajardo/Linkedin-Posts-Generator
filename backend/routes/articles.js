@@ -1,9 +1,31 @@
 const express = require('express');
 const router = express.Router();
 const xml2js = require('xml2js');
+const { processArticles } = require('../controllers/articlesController');
 
 const openaiService = require('../services/openaiService');
 
+router.get('/validate-feed', async (req, res) => {
+    const { url } = req.query;
+
+    try {
+        const response = await axios.get(url);
+        await xml2js.parseStringPromise(response.data);
+        res.status(200).json({ valid: true });
+    } catch (error) {
+        res.status(400).json({ valid: false, error: 'Invalid RSS feed' });
+    }
+});
+
+router.post('/generate', async (req, res) => {
+    const { rssUrls, context } = req.body;
+    try {
+        const posts = await processArticles(rssUrls, context);
+        res.status(200).json({ posts });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 router.post('/fetch', async (req, res) => {
     const { feeds } = req.body;

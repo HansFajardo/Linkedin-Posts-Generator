@@ -137,3 +137,10 @@ h1 {
   background-color: #218838;
 }
 
+input[type="text"] {
+  padding: 10px;
+  width: 100%;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
