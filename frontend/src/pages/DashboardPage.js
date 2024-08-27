@@ -1,9 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function DashboardPage() {
     const [rssFeeds, setRssFeeds] = useState([]);
     const [posts, setPosts] = useState([]);
-    const [error, setError] = useState(null); // To display errors
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+        }
+    }, [navigate]);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/login');
+    };
 
     const handleFetchFeeds = async () => {
         try {
@@ -35,7 +49,6 @@ function DashboardPage() {
         }
     };
 
-
     const handleGeneratePosts = async (articles) => {
         try {
             const response = await fetch('http://localhost:5000/api/articles/generate-posts', {
@@ -64,23 +77,48 @@ function DashboardPage() {
 
     return (
         <div className="container">
-            <h1>Dashboard</h1>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h1>Dashboard</h1>
+                <button
+                    className='logout-btn'
+                    onClick={handleLogout}
+                >
+                    Logout
+                </button>
+            </div>
             <div>
                 <input
                     type="text"
                     placeholder="Enter RSS feed URLs, separated by commas"
                     onChange={(e) => setRssFeeds(e.target.value.split(',').map(url => url.trim()))}
+                    style={{
+                        padding: '10px',
+                        width: '100%',
+                        marginBottom: '20px',
+                        border: '1px solid #ccc',
+                        borderRadius: '5px',
+                    }}
                 />
-                <button onClick={handleFetchFeeds}>Fetch and Generate Posts</button>
+                <button
+                    className='fetch-gen-btn'
+                    onClick={handleFetchFeeds}
+                >
+                    Fetch and Generate Posts
+                </button>
             </div>
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <div>
                 <h2>Generated LinkedIn Posts</h2>
                 {posts.length > 0 ? (
                     posts.map((post, index) => (
-                        <div key={index}>
+                        <div key={index} style={{ margin: '10px 0', padding: '10px', border: '1px solid #ddd', borderRadius: '5px' }}>
                             <p>{post.text}</p>
-                            <button onClick={() => navigator.clipboard.writeText(post.text)}>Copy</button>
+                            <button
+                                className='copy-btn'
+                                onClick={() => navigator.clipboard.writeText(post.text)}
+                            >
+                                Copy
+                            </button>
                         </div>
                     ))
                 ) : (

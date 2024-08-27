@@ -63,6 +63,33 @@ button:hover {
   background-color: #0056b3;
 }
 
+.copy-btn {
+  padding: 5px 10px;
+  background-color: #2196F3;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.fetch-gen-btn {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.logout-btn {
+  padding: 10px 20px;
+  background-color: #f44336;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 /* Header Style */
 h1 {
   font-size: 2rem;
